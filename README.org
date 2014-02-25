@@ -15,19 +15,20 @@
 ** Supported sites
    | Site/Feature       | Play | Pause | Mute | Unmute | Previous | Next | Fullscreen |
    |--------------------+------+-------+------+--------+----------+------+------------|
-   | Amazon MP3 Store   | X    | X     | O    | O      | O        | O    | N/A        |
+   | 8tracks            | X    | X     | X    | X      | -        | X    | N/A        |
+   | Amazon MP3 Store   | X    | X     | -    | -      | -        | -    | N/A        |
    | Amazon CloudPlayer | X    | X     | X    | X      | X        | X    | N/A        |
-   | Bandcamp           | X    | X     | O    | O      | X        | X    | N/A        |
+   | Bandcamp           | X    | X     | -    | -      | X        | X    | N/A        |
    | Grooveshark        | X    | X     | X    | X      | X        | X    | N/A        |
-   | Pandora            | X    | X     | X    | NW     | O        | X    | N/A        |
+   | Pandora            | X    | X     | X    | NW     | -        | X    | N/A        |
    | SoundCloud         | X    | X     | X    | X      | X        | X    | N/A        |
-   | Twitter Music      | X    | X     | O    | O      | O        | X    | N/A        |
+   | Twitter Music      | X    | X     | -    | -      | -        | X    | N/A        |
    | Youtube HTML5      | X    | X     | X    | X      | N/A      | N/A  | X          |
 *** Key
     | X   | Works                  |
     | NW  | Not Working/Needs Work |
     | N/A | Not Applicable         |
-    | O   | Not Supported by Site  |
+    | -   | Not Supported by Site  |
 
 ** Would like to support
    - Amazon Instant Video
