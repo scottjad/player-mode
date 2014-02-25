@@ -4,6 +4,8 @@
 
 ** Overview
    These are the provided commands and their bindings:
+   | Command       | Key          |
+   |---------------+--------------|
    | play-or-pause | C-c C-return |
    | mute          | C-c C-m      |
    | previous      | C-c C-p      |
