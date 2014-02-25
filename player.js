@@ -122,6 +122,17 @@ var def_player_site = function (site_name, site_url, button_selectors) {
 };
 
 /* ------------------------------
+   8tracks
+   Test url: http://8tracks.com/moose92/suits-stetsons
+   ------------------------------ */
+
+def_player_site("8tracks",
+                build_url_regexp($domain = "8tracks", $allow_www = true),
+                {"play": ".i-play, .i-pause",
+                 "next": ".i-skip",
+                 "mute": ".volume-mute"});
+
+/* ------------------------------
    Amazon CloudPlayer and MP3 Store
    Test url: https://www.amazon.com/gp/dmusic/mp3/player
    Test url: http://www.amazon.com/Cove-Weather/dp/B001D5796O/
