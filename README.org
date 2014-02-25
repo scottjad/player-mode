@@ -68,12 +68,12 @@
    #+BEGIN_SRC js2
      interactive("player-thumbs-down",
                  "Click the thumbs down button.",
-                 player_click_command("thumbs-down",
-                                      "No thumbs down button found"));
+                 player_command("thumbs-down",
+                                "No thumbs down button found"));
 
      define_key(player_keymap, "C-c C-d", "player-thumbs-down");
 
-     player_sites["pandora"]["thumbs-down"] = ".thumbsDownButton";
+     player_button_selectors["pandora"]["thumbs-down"] = ".thumbsDownButton";
    #+END_SRC
 
 ** Controlling your player from your window manager
