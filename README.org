@@ -1,0 +1,107 @@
+* Player-mode
+  Conkeror page-mode for controlling media players on websites like
+  Youtube, Grooveshark, etc.
+
+** Overview
+   These are the provided commands and their bindings:
+   | play-or-pause | C-c C-return |
+   | mute          | C-c C-m      |
+   | previous      | C-c C-p      |
+   | next          | C-c C-n      |
+   | fullscreen    | C-c C-f      |
+
+** Supported sites
+   | Site/Feature       | Play | Pause | Mute | Unmute | Previous | Next | Fullscreen |
+   |--------------------+------+-------+------+--------+----------+------+------------|
+   | Amazon MP3 Store   | X    | X     | O    | O      | O        | O    | N/A        |
+   | Amazon CloudPlayer | X    | X     | X    | X      | X        | X    | N/A        |
+   | Bandcamp           | X    | X     | O    | O      | X        | X    | N/A        |
+   | Grooveshark        | X    | X     | X    | X      | X        | X    | N/A        |
+   | Pandora            | X    | X     | X    | NW     | O        | X    | N/A        |
+   | SoundCloud         | X    | X     | X    | X      | X        | X    | N/A        |
+   | Twitter Music      | X    | X     | O    | O      | O        | X    | N/A        |
+   | Youtube HTML5      | X    | X     | X    | X      | N/A      | N/A  | X          |
+*** Key
+    | X   | Works                  |
+    | NW  | Not Working/Needs Work |
+    | N/A | Not Applicable         |
+    | O   | Not Supported by Site  |
+
+** Would like to support
+   - Amazon Instant Video
+   - Last.fm
+   - Netflix
+   - Rdio
+
+** Installation
+   : cd ~/.conkerorrc
+   : git clone https://github.com/scottjad/player-mode.git
+   : ln -s player-mode/player.js .
+
+** How to add additional sites
+   Add something like this to your Conkeror RC file:
+
+   #+BEGIN_SRC js2
+     def_player_site("grooveshark",
+                     build_url_regexp($domain = "grooveshark", $allow_www = true),
+                     {"play": "#play-pause",
+                      "mute": "#volume",
+                      "previous": "#play-prev",
+                      "next": "#play-next"});
+   #+END_SRC
+
+   If you're adding support for a popular site, please consider adding it
+   to player.js and creating a pull request once you've tested it
+   extensively.
+
+   You might want to use something like this to find the the selectors.
+
+   #+BEGIN_SRC js2
+     require("dom-inspector");
+     define_key(default_global_keymap, "C-c i", "inspect-click");
+   #+END_SRC
+
+** How to add additional commands
+   Say you like to give songs the thumbs down on Pandora. You could add
+   support like this:
+
+   #+BEGIN_SRC js2
+     interactive("player-thumbs-down",
+                 "Click the thumbs down button.",
+                 player_click_command("thumbs-down",
+                                      "No thumbs down button found"));
+
+     define_key(player_keymap, "C-c C-d", "player-thumbs-down");
+
+     player_sites["pandora"]["thumbs-down"] = ".thumbsDownButton";
+   #+END_SRC
+
+** Controlling your player from your window manager
+   You could bind a key in your window manager to run a command like
+   this:
+   : conkeror -f player-play-or-pause
+
+   This is currently quite limited because the player would have to be
+   the current buffer. This should be fixable.
+
+** Limitations
+
+  - Does not handle players whose controls are Flash not HTML. If the
+    site uses Flash to play the media itself that's fine.
+
+  - Currently no way to turn page-modes on by something other than url.
+    So Youtube players on blogs won't work unless player-mode is enabled
+    manually. And right now even if it is enabled manually it won't be
+    able to find the player because that's done by url. There should be
+    a fix for this.
+
+  - Currently no way to have two different players on one page, such as
+    a blog where one article has a youtube player and a soundcloud
+    player.
+
+  - Should eventually support the browser's built-in HTML5 media player
+    itself. Maybe work up from the currently focused element to find a
+    media player to use, and failing that use the url.
+
+** License
+   MIT/X11
