@@ -181,6 +181,29 @@ def_player_site("grooveshark",
                  "next": "#play-next"});
 
 /* ------------------------------
+   Last.fm
+   Test url: http://www.last.fm/listen/artist/GodWolf/similarartists
+ ------------------------------ */
+function player_lastfm_play(I) {
+    var elem = I.buffer.document.querySelector("#radioControlPlay");
+    if (elem && elem.offsetHeight == 0) {
+        player_click_element(I, "#radioControlPause",
+                             "No pause button found");
+    }
+    else {
+        player_click_element(I, "#radioControlPlay",
+                             "No play button found");
+    }
+}
+
+def_player_site("lastfm",
+                /last\.fm/,
+                {"play": player_lastfm_play,
+                 // mute doesn't work yet because it is in an iframe
+                 // "mute": ".ytp-button-volume",
+                 "next": "#radioControlSkip"});
+
+/* ------------------------------
    Pandora
    ------------------------------ */
 

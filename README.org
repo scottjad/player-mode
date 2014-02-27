@@ -20,6 +20,7 @@
    | Amazon CloudPlayer | X    | X     | X    | X      | X        | X    | N/A        |
    | Bandcamp           | X    | X     | -    | -      | X        | X    | N/A        |
    | Grooveshark        | X    | X     | X    | X      | X        | X    | N/A        |
+   | Last.fm            | X    | X     | NW   | NW     | -        | X    | N/A        |
    | Pandora            | X    | X     | X    | NW     | -        | X    | N/A        |
    | SoundCloud         | X    | X     | X    | X      | X        | X    | N/A        |
    | Twitter Music      | X    | X     | -    | -      | -        | X    | N/A        |
@@ -32,7 +33,6 @@
 
 ** Would like to support
    - Amazon Instant Video
-   - Last.fm
    - Netflix
    - Rdio
 
