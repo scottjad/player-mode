@@ -22,6 +22,7 @@
    | Grooveshark        | X    | X     | X    | X      | X        | X    | N/A        |
    | Last.fm            | X    | X     | NW   | NW     | -        | X    | N/A        |
    | Pandora            | X    | X     | X    | NW     | -        | X    | N/A        |
+   | rdio               | X    | X     | X    | X      | X        | X    | N/A        |
    | SoundCloud         | X    | X     | X    | X      | X        | X    | N/A        |
    | Twitter Music      | X    | X     | -    | -      | -        | X    | N/A        |
    | Youtube HTML5      | X    | X     | X    | X      | N/A      | N/A  | X          |
@@ -34,7 +35,6 @@
 ** Would like to support
    - Amazon Instant Video
    - Netflix
-   - Rdio
 
 ** Installation
    : cd ~/.conkerorrc

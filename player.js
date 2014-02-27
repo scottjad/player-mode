@@ -241,6 +241,18 @@ function player_pandora_mute (I) {
 }
 
 /* ------------------------------
+   rdio
+   Test url: http://www.rdio.com/
+   ------------------------------ */
+
+def_player_site("rdio",
+                build_url_regexp($domain = "rdio", $allow_www = true),
+                {"play": ".play_pause",
+                 "mute": ".Volume",
+                 "previous": ".prev",
+                 "next": ".next"});
+
+/* ------------------------------
    SoundCloud
    Test url: https://soundcloud.com/perabhjot-grewal
    ------------------------------ */
