@@ -102,7 +102,7 @@ var player_url_tests = {};
 // Ex: {"bandcamp": {"play": ".play-btn"}}
 var player_button_selectors = {};
 
-interactive("player-play-or-pause",
+interactive("player-play",
             "Click the play/pause button.",
             player_command("play",
                            "No play or pause button found"));
@@ -127,7 +127,7 @@ interactive("player-fullscreen",
             player_command("fullscreen",
                            "No fullscreen button found"));
 
-define_key(player_keymap, "C-c C-return", "player-play-or-pause");
+define_key(player_keymap, "C-c C-return", "player-play");
 define_key(player_keymap, "C-c C-m", "player-mute");
 define_key(player_keymap, "C-c C-n", "player-next");
 define_key(player_keymap, "C-c C-p", "player-previous");

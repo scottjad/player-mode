@@ -4,13 +4,13 @@
 
 ** Overview
    These are the provided commands and their bindings:
-   | Command       | Key          |
-   |---------------+--------------|
-   | play-or-pause | C-c C-return |
-   | mute          | C-c C-m      |
-   | previous      | C-c C-p      |
-   | next          | C-c C-n      |
-   | fullscreen    | C-c C-f      |
+   | Command    | Key          |
+   |------------+--------------|
+   | play       | C-c C-return |
+   | mute       | C-c C-m      |
+   | previous   | C-c C-p      |
+   | next       | C-c C-n      |
+   | fullscreen | C-c C-f      |
 
 ** Supported sites
    | Site/Feature       | Play | Pause | Next | Previous | Mute | Unmute | Fullscreen |
@@ -88,7 +88,7 @@
 ** Controlling your player from your window manager
    You could bind a key in your window manager to run a command like
    this:
-   : conkeror -f player-play-or-pause
+   : conkeror -f player-play
 
    This will first try to interact with the current buffer, but if
    player-mode is not supported there, then it will interact with the
