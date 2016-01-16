@@ -13,25 +13,25 @@
    | fullscreen    | C-c C-f      |
 
 ** Supported sites
-   | Site/Feature       | Play | Pause | Mute | Unmute | Previous | Next | Fullscreen |
-   |--------------------+------+-------+------+--------+----------+------+------------|
-   | 8tracks            | X    | X     | X    | X      | -        | X    | N/A        |
-   | Amazon MP3 Store   | X    | X     | -    | -      | -        | -    | N/A        |
-   | Amazon CloudPlayer | X    | X     | X    | X      | X        | X    | N/A        |
-   | Bandcamp           | X    | X     | -    | -      | X        | X    | N/A        |
-   | Hype Machine       | X    | X     | X    | X      | X        | X    | N/A        |
-   | Google Music       | X    | X     | NW   | NW     | X        | X    | N/A        |
-   | Grooveshark        | X    | X     | X    | X      | X        | X    | N/A        |
-   | Indie Shuffle      | X    | X     | -    | -      | -        | X    | N/A        |
-   | Jamendo            | X    | X     | NW   | NW     | X        | X    | N/A        |
-   | Last.fm            | X    | X     | NW   | NW     | -        | X    | N/A        |
-   | Pandora            | X    | X     | X    | NW     | -        | X    | N/A        |
-   | rdio               | X    | X     | X    | X      | X        | X    | N/A        |
-   | songza             | X    | X     | X    | X      | -        | X    | N/A        |
-   | SoundCloud         | X    | X     | X    | X      | X        | X    | N/A        |
-   | Spotify            | X    | X     | NW   | NW     | X        | X    | N/A        |
-   | Twitter Music      | X    | X     | -    | -      | -        | X    | N/A        |
-   | Youtube HTML5      | X    | X     | X    | X      | X        | X    | X          |
+   | Site/Feature       | Play | Pause | Next | Previous | Mute | Unmute | Fullscreen |
+   |--------------------+------+-------+------+----------+------+--------+------------|
+   | 8tracks            | X    | X     | X    | -        | X    | X      | N/A        |
+   | Amazon MP3 Store   | X    | X     | -    | -        | -    | -      | N/A        |
+   | Amazon CloudPlayer | X    | X     | X    | X        | X    | X      | N/A        |
+   | Bandcamp           | X    | X     | X    | X        | -    | -      | N/A        |
+   | Hype Machine       | X    | X     | X    | X        | X    | X      | N/A        |
+   | Google Music       | X    | X     | X    | X        | NW   | NW     | N/A        |
+   | Grooveshark        | X    | X     | X    | X        | X    | X      | N/A        |
+   | Indie Shuffle      | X    | X     | X    | -        | -    | -      | N/A        |
+   | Jamendo            | X    | X     | X    | X        | NW   | NW     | N/A        |
+   | Last.fm            | X    | X     | X    | -        | NW   | NW     | N/A        |
+   | Pandora            | X    | X     | X    | -        | X    | NW     | N/A        |
+   | rdio               | X    | X     | X    | X        | X    | X      | N/A        |
+   | songza             | X    | X     | X    | -        | X    | X      | N/A        |
+   | SoundCloud         | X    | X     | X    | X        | X    | X      | N/A        |
+   | Spotify            | X    | X     | X    | X        | NW   | NW     | N/A        |
+   | Twitter Music      | X    | X     | X    | -        | -    | -      | N/A        |
+   | Youtube HTML5      | X    | X     | X    | X        | X    | X      | X          |
 *** Key
     | X   | Works                  |
     | NW  | Not Working/Needs Work |
