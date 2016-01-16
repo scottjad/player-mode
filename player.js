@@ -2,7 +2,7 @@
  * (C) Copyright 2012, 2013, 2014 Scott Jaderholm
  *
  * Use, modification, and distribution are subject to the terms
- * specified in the COPYING file.
+ * specified in the LICENSE file.
 
  * Description: Conkeror page-mode for controlling media players on
  * websites like Youtube, Grooveshark, etc.
