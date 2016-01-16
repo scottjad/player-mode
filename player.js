@@ -253,7 +253,8 @@ def_player_site("hypemachine",
 
 def_player_site("indieshuffle",
                 build_url_regexp($domain = "indieshuffle", $allow_www = true),
-                {"play": "div.header-collapse.expanded .commontrack,.commontrack.figure",
+                {"play": "#currentSong .commontrack",
+                 "previous": "#playlistContainer .commontrack.previous",
                  "next": "#playNextSong"});
 
 /* ------------------------------
