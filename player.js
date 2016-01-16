@@ -13,14 +13,18 @@ require("content-buffer.js");
 
 define_keymap("player_keymap", $display_name = "player");
 
-var player_click_element = function(I, selector, error_message) {
-    var elem = I.buffer.document.querySelector(selector);
+var player_click_element = function(I, elem, error_message) {
     if (elem) {
         dom_node_click(elem, 1, 1);
     } else {
         I.minibuffer.message(error_message);
     }
 };
+
+var player_click_selector = function(I, selector, error_message) {
+    var elem = I.buffer.document.querySelector(selector);
+    player_click_element(I, elem, error_message);
+}
 
 var player_command = function(command, error_message) {
     return function (I) {
@@ -29,9 +33,14 @@ var player_command = function(command, error_message) {
             var selector = player_button_selectors[site][command];
             if (selector) {
                 if (selector instanceof Function) {
-                    selector(I);
+                    // the function might click the element itself, or
+                    // might return an element to be clicked
+                    var elem = selector(I);
+                    if (elem instanceof Ci.nsIDOMHTMLElement) {
+                        player_click_element(I, elem, error_message);
+                    }
                 } else {
-                    player_click_element(I, selector, error_message);
+                    player_click_selector(I, selector, error_message);
                 }
             } else {
                 I.minibuffer.message("Command not implemented for this site.");
@@ -122,6 +131,30 @@ var def_player_site = function (site_name, site_url, button_selectors) {
 };
 
 /* ------------------------------
+   Helpers
+   ------------------------------ */
+function player_play_function_visibility(playButtonSelector,pauseButtonSelector) {
+    return function (I) {
+        var elem = I.buffer.document.querySelector(playButtonSelector);
+        if (elem && elem.style.display !== "none") {
+            player_click_selector(I, playButtonSelector,
+                                 "No play button found");
+        } else {
+            player_click_selector(I, pauseButtonSelector,
+                                 "No pause button found");
+        }
+    };
+};
+
+function player_iframe_button(iframe_selector, button_selector) {
+    return function (I) {
+        var player_iframe = I.buffer.document.querySelector(iframe_selector).contentDocument;
+        var elem = player_iframe.querySelector(button_selector);
+        return elem;
+    }
+}
+
+/* ------------------------------
    8tracks
    Test url: http://8tracks.com/moose92/suits-stetsons
    ------------------------------ */
@@ -142,17 +175,17 @@ def_player_site("amazon-cloudplayer",
                 build_url_regexp($domain = "amazon", $allow_www = true),
                 {"play": ".a-icon-play-all, .a-icon-pause-all, .mp3MasterPlay",
                  "previous": ".mp3PlayPrevious",
-                 "next": ".mp3PlayNext",
+                 "next": ".mp3PlayNext, .a-icon-play-next",
                  "mute": player_amazon_mute});
 
 function player_amazon_mute(I) {
     var elem = I.buffer.document.querySelector(".volumeControl .ui-slider-range");
     if (elem && elem.style.width == "0%") {
-        player_click_element(I, "#fullVolume",
+        player_click_selector(I, "#fullVolume",
                              "No 'full volume' button found");
     }
     else {
-        player_click_element(I, "#noVolume",
+        player_click_selector(I, "#noVolume",
                              "No 'no volume' button found");
     }
 }
@@ -169,6 +202,17 @@ def_player_site("bandcamp",
                  "next": ".nextbutton"});
 
 /* ------------------------------
+   Google Music
+   Test url: http://grooveshark.com/#!/album/Cove/1545589
+   ------------------------------ */
+
+def_player_site("google-music",
+                build_url_regexp($domain = "play.google", $allow_www = true),
+                {"play": "[data-id=play-pause]",
+                 "next": "[data-id=forward]",
+                 "previous": "[data-id=rewind]"});
+
+/* ------------------------------
    Grooveshark
    Test url: http://grooveshark.com/#!/album/Cove/1545589
    ------------------------------ */
@@ -178,7 +222,50 @@ def_player_site("grooveshark",
                 {"play": "#play-pause",
                  "mute": "#volume",
                  "previous": "#play-prev",
-                 "next": "#play-next"});
+                 "next": "#play-next",
+                 "artist": "TODO.now-playing-link.artist",
+                 "song": "TODO.now-playing-link.song",
+                 "time-percent": "TODO#elapsed.style.width",
+                 "time-position": "TODO#time-elapsed",
+                 "time-total": "TODO#time-total"});
+
+/* ------------------------------
+   Hype Machine
+   Test url: http://hypem.com
+   ------------------------------ */
+
+def_player_site("hypemachine",
+                build_url_regexp($domain = "hypem", $allow_www = true),
+                {"play": "#playerPlay",
+                 "mute": "#player-volume-mute",
+                 "previous": "#playerPrev",
+                 "next": "#playerNext",
+                 "artist": "TODO#player-nowplaying a(first)",
+                 "song": "TODO#player-nowplaying a(second)",
+                 "time-percent": "TODO#player-progress-playing.style.width",
+                 "time-position": "TODO#player-time-position",
+                 "time-total": "TODO#player-time-total"});
+
+/* ------------------------------
+   Indieshuffle
+   Test url: http://www.indieshuffle.com/
+   ------------------------------ */
+
+def_player_site("indieshuffle",
+                build_url_regexp($domain = "indieshuffle", $allow_www = true),
+                {"play": "div.header-collapse.expanded .commontrack,.commontrack.figure",
+                 "next": "#playNextSong"});
+
+/* ------------------------------
+   Jamendo
+   Test url: http://www.jamendo.com/en/search/discover?qs=q=*:*&by=rating
+   ------------------------------ */
+
+def_player_site("jamendo",
+                build_url_regexp($domain = "jamendo", $allow_www = true),
+                {"play": player_play_function_visibility(".playpause.play",".playpause.pause"),
+                 "next": ".nexttrack",
+                "previous": ".prevtrack"});
 
 /* ------------------------------
    Last.fm
@@ -187,11 +274,11 @@ def_player_site("grooveshark",
 function player_lastfm_play(I) {
     var elem = I.buffer.document.querySelector("#radioControlPlay");
     if (elem && elem.offsetHeight == 0) {
-        player_click_element(I, "#radioControlPause",
+        player_click_selector(I, "#radioControlPause",
                              "No pause button found");
     }
     else {
-        player_click_element(I, "#radioControlPlay",
+        player_click_selector(I, "#radioControlPlay",
                              "No play button found");
     }
 }
@@ -210,23 +297,8 @@ def_player_site("lastfm",
 def_player_site("pandora",
                 build_url_regexp($domain = "pandora", $allow_www = true),
                 {"next": ".skipButton",
-                 "play": player_pandora_play,
+                 "play": player_play_function_visibility(".playButton",".pauseButton"),
                  "mute": player_pandora_mute});
-
-function player_pandora_play_button_is_visible (I) {
-    var elem = I.buffer.document.querySelector(".playButton");
-    return (elem && elem.style.display !== "none");
-}
-
-function player_pandora_play (I) {
-    if (pandora_play_button_is_visible(I)) {
-        player_click_element(I, ".playButton",
-                             "No play button found");
-    }else {
-        player_click_element(I, ".pauseButton",
-                             "No pause button found");
-    }
-}
 
 // TODO Unmute doesn't work, I couldn't figure out how to unmute
 // manually via JS even in Chrome Console
@@ -253,16 +325,53 @@ def_player_site("rdio",
                  "next": ".next"});
 
 /* ------------------------------
+   songza
+   Test url: http://songza.com/concierge/today-s-indie/5230959f5325bf29cd4d4423/5230e24f311e171fa6f2087c/
+   ------------------------------ */
+
+def_player_site("songza",
+                build_url_regexp($domain = "songza", $allow_www = true),
+                {"play": ".miniplayer-control-play-pause, .ui-icon-ios7-play",
+                 "mute": ".miniplayer-volume-icon",
+                 "next": ".miniplayer-control-skip"});
+
+/* ------------------------------
    SoundCloud
    Test url: https://soundcloud.com/perabhjot-grewal
    ------------------------------ */
 
 def_player_site("soundcloud",
                 build_url_regexp($domain = "soundcloud", $allow_www = true),
-                {"play": ".playing, .playButton",
+                {"play": ".playControl, .playButton",
                  "mute": ".volume__togglemute",
                  "previous": ".prevbutton, .skipControl__previous",
                  "next": ".nextbutton, .skipControl__next"});
+
+/* ------------------------------
+   spotify
+   Test url: https://play.spotify.com/user/spotify/playlist/1C8k4jcNnfiRw2RtO6CByK
+   ------------------------------ */
+
+def_player_site("spotify",
+                build_url_regexp($domain = "play.spotify"),
+                {"play": player_iframe_button("#app-player", "#play-pause"),
+                 "previous": player_iframe_button("#app-player", "#previous"),
+                 "next": player_iframe_button("#app-player", "#next")});
+
+// TODO need a dom_node_click that's relative to item setting offsetX/Y.
+// Need MouseEvent constructor access from Conkeror for that.
+function player_spotify_mute (I) {
+    var volume_slider = player_iframe_button("#app-player", "#vol-position")(I);
+    if (volume_slider) {
+        if (volume_slider.style.left == "0.00px") {
+            dom_node_click(volume_slider, 100, 8);
+        } else {
+            dom_node_click(volume_slider, 10, 8);
+        }
+    } else {
+        I.minibuffer.message("No mute button found");
+    }
+}
 
 /* ------------------------------
    Twitter Music
@@ -277,15 +386,17 @@ def_player_site("twitter",
 /* ------------------------------
    Youtube HTML5 Player
    Test url: http://www.youtube.com/watch?v=pPWcX-16A9Y
+   Test for next/prev https://www.youtube.com/playlist?list=PL8O3Xz4bn9o4MFHjue73kS4Um4mpxvJ7p
    ------------------------------ */
 
 def_player_site("youtube-html5",
                 build_url_regexp($domain = "youtube", $allow_www = true),
-                {"play": ".ytp-button-pause, .ytp-button-play, .ytp-button-replay",
-                 "mute": ".ytp-button-volume",
-                 "fullscreen": ".ytp-button-fullscreen-enter, .ytp-button-fullscreen-exit"});
+                {"play": ".ytp-play-button, .ytp-button-pause, .ytp-button-play, .ytp-button-replay",
+                 "mute": ".ytp-mute-button, .ytp-button-volume",
+                 "previous": ".ytp-prev-button, .yt-uix-button.prev-playlist-list-item",
+                 "next": ".ytp-next-button, .yt-uix-button.next-playlist-list-item",
+                 "fullscreen": ".ytp-fullscreen-button, .ytp-button-fullscreen-enter, .ytp-button-fullscreen-exit"});
 
 page_mode_activate(player_mode);
 
-provide("player");
-
+provide("player.js");
