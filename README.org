@@ -90,9 +90,10 @@
    this:
    : conkeror -f player-play-or-pause
 
-   This is currently quite limited because the player would have to be
-   the current buffer. This should be fixable.
-
+   This will first try to interact with the current buffer, but if
+   player-mode is not supported there, then it will interact with the
+   last buffer where player-mode commands were used, if that buffer has
+   not changed to a new document.
 ** Limitations
 
   - Does not handle players whose controls are Flash not HTML. If the

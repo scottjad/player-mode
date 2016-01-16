@@ -16,6 +16,7 @@ define_keymap("player_keymap", $display_name = "player");
 var player_click_element = function(I, elem, error_message) {
     if (elem) {
         dom_node_click(elem, 1, 1);
+        player_record_use(I);
     } else {
         I.minibuffer.message(error_message);
     }
@@ -24,6 +25,13 @@ var player_click_element = function(I, elem, error_message) {
 var player_click_selector = function(I, selector, error_message) {
     var elem = I.buffer.document.querySelector(selector);
     player_click_element(I, elem, error_message);
+}
+
+var player_last_use_context;
+
+var player_record_use = function(I) {
+    player_last_use_context = I;
+    I.buffer.document.player_used = true;
 }
 
 var player_command = function(command, error_message) {
@@ -38,6 +46,8 @@ var player_command = function(command, error_message) {
                     var elem = selector(I);
                     if (elem instanceof Ci.nsIDOMHTMLElement) {
                         player_click_element(I, elem, error_message);
+                    } else {
+                        player_record_use(I);
                     }
                 } else {
                     player_click_selector(I, selector, error_message);
@@ -45,7 +55,12 @@ var player_command = function(command, error_message) {
             } else {
                 I.minibuffer.message("Command not implemented for this site.");
             }
-        } else {
+        }
+        else if (!player_last_use_context.buffer.dead &&
+                 player_last_use_context.buffer.document.player_used) {
+            player_command(command, error_message)(player_last_use_context);
+        }
+        else {
             I.minibuffer.message("Current url not recognized as a supported site.");
         }
     };
