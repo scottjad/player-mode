@@ -1,5 +1,5 @@
 /**
- * (C) Copyright 2012, 2013, 2014 Scott Jaderholm
+ * (C) Copyright 2012-2016 Scott Jaderholm
  *
  * Use, modification, and distribution are subject to the terms
  * specified in the LICENSE file.
