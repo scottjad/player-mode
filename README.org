@@ -113,5 +113,8 @@
     itself. Maybe work up from the currently focused element to find a
     media player to use, and failing that use the url.
 
+** Similar programs
+   - https://github.com/borismus/keysocket
+
 ** License
    MIT/X11
