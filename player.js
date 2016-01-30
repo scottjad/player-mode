@@ -16,7 +16,7 @@ define_keymap("player_keymap", $display_name = "player");
 var player_click_element = function(I, elem, error_message) {
     if (elem) {
         dom_node_click(elem, 1, 1);
-        player_record_use(I);
+        player_last_use_record(I);
     } else {
         I.minibuffer.message(error_message);
     }
@@ -29,13 +29,33 @@ var player_click_selector = function(I, selector, error_message) {
 
 var player_last_use_context;
 
-var player_record_use = function(I) {
+var player_last_use_record = function(I) {
     player_last_use_context = I;
     I.buffer.document.player_used = true;
 }
 
+var player_last_use_available = function() {
+    return player_last_use_context &&
+        player_last_use_context.buffer &&
+        !player_last_use_context.buffer.dead &&
+        player_last_use_context.buffer.document &&
+        player_last_use_context.buffer.document.player_used
+};
+
+interactive("player-last", "Run the next command on the last used buffer",
+            function (I) {
+                I.player_use_last = true;
+            }, $prefix);
+
+var player_command_last_use = function(command, error_message) {
+    player_command(command, error_message)(player_last_use_context);
+};
+
 var player_command = function(command, error_message) {
     return function (I) {
+        if(I.player_use_last) {
+            return player_command_last_use(command, error_message);
+        }
         var site = player_get_current_site(I);
         if (site) {
             var selector = player_button_selectors[site][command];
@@ -47,7 +67,7 @@ var player_command = function(command, error_message) {
                     if (elem instanceof Ci.nsIDOMHTMLElement) {
                         player_click_element(I, elem, error_message);
                     } else {
-                        player_record_use(I);
+                        player_last_use_record(I);
                     }
                 } else {
                     player_click_selector(I, selector, error_message);
@@ -56,9 +76,8 @@ var player_command = function(command, error_message) {
                 I.minibuffer.message("Command not implemented for this site.");
             }
         }
-        else if (!player_last_use_context.buffer.dead &&
-                 player_last_use_context.buffer.document.player_used) {
-            player_command(command, error_message)(player_last_use_context);
+        else if (player_last_use_available()) {
+            player_command_last_use(command, error_message);
         }
         else {
             I.minibuffer.message("Current url not recognized as a supported site.");
@@ -132,6 +151,7 @@ define_key(player_keymap, "C-c C-m", "player-mute");
 define_key(player_keymap, "C-c C-n", "player-next");
 define_key(player_keymap, "C-c C-p", "player-previous");
 define_key(player_keymap, "C-c C-f", "player-fullscreen");
+define_key(player_keymap, "C-c C-l", "player-last");
 
 define_keymaps_page_mode("player-mode",
     [],

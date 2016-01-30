@@ -94,6 +94,20 @@
    player-mode is not supported there, then it will interact with the
    last buffer where player-mode commands were used, if that buffer has
    not changed to a new document.
+
+** Interacting with the last used buffer
+   To interact with the same buffer that player last used, if it is no
+   longer the current buffer, you would use:
+   : conkeror -f player-last -f player-play
+
+   To do this from within conkeror on a buffer that is in player-mode,
+   you can use =C-c C-l= then a normal player command keybinding like
+   =C-c C-n=.
+
+   There's currently no way to control the last used buffer from within
+   Conkeror if the current buffer is not in player-mode. I use my window
+   manager bindings in that scenario.
+
 ** Limitations
 
   - Does not handle players whose controls are Flash not HTML. If the
