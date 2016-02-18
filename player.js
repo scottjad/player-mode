@@ -13,7 +13,7 @@ require("content-buffer.js");
 
 define_keymap("player_keymap", $display_name = "player");
 
-var player_click_element = function(I, elem, error_message) {
+function player_click_element(I, elem, error_message) {
     if (elem) {
         dom_node_click(elem, 1, 1);
         player_last_use_record(I);
@@ -22,19 +22,19 @@ var player_click_element = function(I, elem, error_message) {
     }
 };
 
-var player_click_selector = function(I, selector, error_message) {
+function player_click_selector(I, selector, error_message) {
     var elem = I.buffer.document.querySelector(selector);
     player_click_element(I, elem, error_message);
 }
 
 var player_last_use_context;
 
-var player_last_use_record = function(I) {
+function player_last_use_record(I) {
     player_last_use_context = I;
     I.buffer.document.player_used = true;
 }
 
-var player_last_use_available = function() {
+function player_last_use_available() {
     return player_last_use_context &&
         player_last_use_context.buffer &&
         !player_last_use_context.buffer.dead &&
@@ -47,11 +47,11 @@ interactive("player-last", "Run the next command on the last used buffer",
                 I.player_use_last = true;
             }, $prefix);
 
-var player_command_last_use = function(command, error_message) {
+function player_command_last_use(command, error_message) {
     player_command(command, error_message)(player_last_use_context);
 };
 
-var player_command = function(command, error_message) {
+function player_command(command, error_message) {
     return function (I) {
         if(I.player_use_last) {
             return player_command_last_use(command, error_message);
@@ -90,7 +90,7 @@ var player_command = function(command, error_message) {
 define_variable("player_current_site", null,
     "Name of the current site used to look up things like button ids.");
 
-var player_site_from_url = function(url) {
+function player_site_from_url(url) {
     for (var site in player_url_tests) {
         var test = player_url_tests[site];
         if (test instanceof RegExp) {
@@ -104,7 +104,7 @@ var player_site_from_url = function(url) {
     return null;
 };
 
-var player_get_current_site = function(I) {
+function player_get_current_site(I) {
     var local = I.buffer.page.local;
     var uri = I.buffer.current_uri;
     if (local.player_current_site == null) {
@@ -159,7 +159,7 @@ define_keymaps_page_mode("player-mode",
     $display_name = "Player");
 
 
-var def_player_site = function (site_name, site_url, button_selectors) {
+function def_player_site(site_name, site_url, button_selectors) {
     player_url_tests[site_name] = site_url;
     player_button_selectors[site_name] = button_selectors;
     player_mode.test.push(player_url_tests[site_name]);
