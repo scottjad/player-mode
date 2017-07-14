@@ -75,12 +75,15 @@
    support like this:
 
    #+BEGIN_SRC js2
+     player_button_selectors["pandora"]["thumbs-down"] = ".thumbsDownButton";
+
      interactive("player-thumbs-down",
                  "Click the thumbs down button.",
                  player_command("thumbs-down",
                                 "No thumbs down button found"));
 
      define_key(player_keymap, "C-c C-d", "player-thumbs-down");
+   #+END_SRC
 
    Or for a like button on Spotify:
    
