@@ -392,7 +392,8 @@ def_player_site("spotify",
                 build_url_regexp($domain = "play.spotify"),
                 {"play": player_iframe_button("#app-player", "#play-pause"),
                  "previous": player_iframe_button("#app-player", "#previous"),
-                 "next": player_iframe_button("#app-player", "#next")});
+                 "next": player_iframe_button("#app-player", "#next"),
+                 "like": player_iframe_button("#app-player","#track-add:not(.added)")});
 
 // TODO need a dom_node_click that's relative to item setting offsetX/Y.
 // Need MouseEvent constructor access from Conkeror for that.
