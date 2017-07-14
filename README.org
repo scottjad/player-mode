@@ -82,7 +82,17 @@
 
      define_key(player_keymap, "C-c C-d", "player-thumbs-down");
 
-     player_button_selectors["pandora"]["thumbs-down"] = ".thumbsDownButton";
+   Or for a like button on Spotify:
+   
+   #+BEGIN_SRC js2
+     player_button_selectors["spotify"]["like"] = player_iframe_button("#app-player","#track-add:not(.added)");
+
+     interactive("player-like",
+                 "Click the like button.",
+                 player_command("like",
+                                "No like button found"));
+
+     define_key(player_keymap, "C-c C-u", "player-like");
    #+END_SRC
 
 ** Controlling your player from your window manager
